@@ -46,17 +46,32 @@
     firebase.auth().onAuthStateChanged(user => {
         if(user){
             console.log(user);
+            document.getElementById('fields').style.visibility="hidden";
             btnLogout.style.visibility="visible";
             btnLogin.style.visibility="hidden";
             btnSignup.style.visibility="hidden";
             welcome.innerHTML = "Welcome, " + user.email + ".";
         } else {
             console.log("not logged in");
+            document.getElementById('fields').style.visibility="visible";
             btnLogout.style.visibility="hidden";
             btnLogin.style.visibility="visible";
             btnSignup.style.visibility="visible";
             welcome.innerHTML = "Log In";
         }
+    });
+
+    const btnUpload = document.getElementById("upload");
+
+    btnUpload.addEventListener('click', e => {
+        const fileInput = document.getElementById('file');
+        const file = fileInput.files[0]
+
+        // gotta create a ref
+        console.log(file.name)
+        uploadRef = firebase.storage().ref(file.name);
+        // then upload the file there
+        uploadRef.put(file);
     });
 
 })();

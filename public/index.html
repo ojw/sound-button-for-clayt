@@ -19,11 +19,18 @@
   <body>
     <div>
       <p id="welcome">Log In</p>
-      <div><label>Email</label><input id="email" type="text"></input></div>
-      <div><label>Password</label><input id="password" type="password"></input></div>
+      <div id="fields">
+        <div><label>Email</label><input id="email" type="text"></input></div>
+        <div><label>Password</label><input id="password" type="password"></input></div>
+      </div>
       <input id="login" type="button" value="Log In"></input>
       <input id="signup" type="button" value="Sign Up"></input>
       <input id="logout" type="button" value="Log Out"></input>
+    </div>
+
+    <div>
+      <input type="file" id="file" value="upload"></input>
+      <input type="button" id="upload" value="upload"></input>
     </div>
 
     <script defer src="app.js"></script>
