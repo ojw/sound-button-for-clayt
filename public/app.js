@@ -54,6 +54,15 @@
             btnLogin.style.visibility="hidden";
             btnSignup.style.visibility="hidden";
             welcome.innerHTML = "Welcome, " + user.email + ".";
+
+            // log the user's buttons
+
+            var db = firebase.firestore();
+            var docRef = db.collection("users").doc(userId).collection("buttons");
+            docRef.get().then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
+                    console.log(doc.id, "=>", doc.data());
+                })})
         } else {
             console.log("not logged in");
             document.getElementById('fields').style.visibility="visible";
