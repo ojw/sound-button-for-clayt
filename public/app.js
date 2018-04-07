@@ -62,6 +62,35 @@
             docRef.get().then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
                     console.log(doc.id, "=>", doc.data());
+                    var dl = document.getElementById("download");
+                    dl.value = "download " + doc.data().name;
+                    dl.addEventListener('click', e => {
+                        var storage = firebase.storage();
+                        var pathRef = storage.ref(doc.data().location);
+                        pathRef.getDownloadURL()
+                            .then(function(url) {
+                                // See:
+                                // https://firebase.google.com/docs/storage/web/download-files
+                                // note, the dl doesn't work because of cors, see the above
+
+                                // You could do this but probably don't want to:
+                                var xhr = new XMLHttpRequest();
+                                xhr.responseType = 'blob';
+                                xhr.onload = function(event) {
+                                    var blob = xhr.response;
+                                };
+                                xhr.open('GET', url);
+                                xhr.send();
+
+                                // you probably want this one though:
+                                // (except with a sound button, but you get the idea)
+                                // var img = document.getElementById('myimg');
+                                // img.src = url;
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
+                    });
                 })})
         } else {
             console.log("not logged in");
