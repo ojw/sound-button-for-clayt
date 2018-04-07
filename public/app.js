@@ -1,5 +1,7 @@
 (function(){
 
+    var userId;
+
     const config = {
         apiKey: "AIzaSyArEBBO5Z9cLkyQ4GMoXnnWUnZPdxzSDb0",
         authDomain: "sound-button-c5683.firebaseapp.com",
@@ -46,6 +48,7 @@
     firebase.auth().onAuthStateChanged(user => {
         if(user){
             console.log(user);
+            userId = user.uid;
             document.getElementById('fields').style.visibility="hidden";
             btnLogout.style.visibility="visible";
             btnLogin.style.visibility="hidden";
@@ -66,12 +69,22 @@
     btnUpload.addEventListener('click', e => {
         const fileInput = document.getElementById('file');
         const file = fileInput.files[0]
+        const tags = document.getElementById('tags').value;
 
         // gotta create a ref
         console.log(file.name)
-        uploadRef = firebase.storage().ref(file.name);
+        buttonFolder = firebase.storage().ref("buttons/");
+        userButtons = buttonFolder.child(userId);
+        uploadRef = userButtons.child(file.name);
+        console.log(uploadRef);
+        console.log(uploadRef.location.u);
         // then upload the file there
         uploadRef.put(file);
+        // ok also gotta create a db record, for tags etc
+        var db = firebase.firestore();
+        db.collection("users").doc(userId).collection("buttons").add({name: file.name,
+                                                                      location: uploadRef.location.u,
+                                                                      tags: tags});
     });
 
 })();
